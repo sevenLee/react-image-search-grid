@@ -104,7 +104,7 @@ class Image extends Component {
       var marginTop = -Math.abs(Math.floor((viewportHeight - height) / 2));
       var marginLeft = -Math.abs(Math.floor((viewportWidth - width) / 2));
       return {
-        cursor: "pointer",
+        // cursor: "pointer",
         width: width,
         height: height,
         marginLeft: marginLeft,
@@ -140,6 +140,7 @@ class Image extends Component {
 
   render() {
     var alt = this.props.item.alt ? this.props.item.alt : "";
+    const resultItemId = this.props.item.resultItemId;
     var tags =
       typeof this.props.item.tags === "undefined" ? (
         <noscript />
@@ -198,6 +199,8 @@ class Image extends Component {
 
     var ThumbnailImageComponent = this.props.thumbnailImageComponent;
 
+    // console.log("### this.state.hover:", this.state.hover);
+
     return (
       <div
         className="ReactGridGallery_tile"
@@ -226,21 +229,54 @@ class Image extends Component {
         >
           {this.renderCheckButton()}
         </div>
-
         <div
-          className="ReactGridGallery_tile-icon-bar"
-          key={"tile-icon-bar-" + this.props.index}
+          onClick={() => this.props.onClickMoreDetail(resultItemId)}
           style={{
             pointerEvents: "none",
-            opacity: 1,
             position: "absolute",
-            height: "36px",
-            color: "#fff",
-            backgroundColor: "#000"
-            // width: "100%"
+            left: 0,
+            bottom: "0px",
+            overflow: "hidden",
+            display: this.state.hover ? "inline-block" : "none",
+            cursor: "pointer",
+            pointerEvents: "visible",
+            margin: "6px",
+            padding: ".4em .6em .4em",
+            lineHeight: "1",
+            cursor: "pointer",
+            // fontSize: "75%",
+            color: "#096dd9",
+            backgroundColor: "#fff"
           }}
         >
-          Hi!!
+          <span>More Info</span>
+        </div>
+
+        <div
+          onClick={this.props.onClickZoom}
+          style={{
+            pointerEvents: "none",
+            position: "absolute",
+            right: 0,
+            bottom: "0px",
+            overflow: "hidden",
+            display: this.state.hover
+              ? this.props.enableLightbox
+                ? "inline-block"
+                : "none"
+              : "none",
+            cursor: "pointer",
+            pointerEvents: "visible",
+            margin: "6px",
+            padding: ".4em .6em .4em",
+            lineHeight: "1",
+            cursor: "pointer",
+            // fontSize: "75%",
+            color: "#096dd9",
+            backgroundColor: "#fff"
+          }}
+        >
+          <span>zoom</span>
         </div>
 
         <div
