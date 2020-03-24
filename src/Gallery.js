@@ -258,6 +258,8 @@ class Gallery extends Component {
   }
 
   render() {
+    // console.log("### [Gallery] v12 inside props:", this.props);
+
     var images = this.state.thumbnails.map((item, idx) => {
       return (
         <Image
@@ -267,10 +269,11 @@ class Gallery extends Component {
           margin={this.props.margin}
           height={this.props.rowHeight}
           isSelectable={this.props.enableImageSelection}
-        //   onClick={this.getOnClickThumbnailFn()}
+          //   onClick={this.getOnClickThumbnailFn()}
           onSelectImage={this.onSelectImage}
           onClickMoreDetail={id => this.props.onClickMoreDetail(id)}
-          onClickZoom={this.getOnClickZoomFn()}
+          onClickZoom={this.getOnClickThumbnailFn()}
+          enableLightbox={this.props.enableLightbox}
           tagStyle={this.props.tagStyle}
           tileViewportStyle={this.props.tileViewportStyle}
           thumbnailStyle={this.props.thumbnailStyle}
@@ -309,7 +312,8 @@ class Gallery extends Component {
           currentImage={this.state.currentImage}
           preloadNextImage={this.props.preloadNextImage}
           customControls={this.props.customControls}
-          enableKeyboardInput={this.props.enableKeyboardInput}
+          enableKeyboardInput={false}
+          // enableKeyboardInput={this.props.enableKeyboardInput}
           imageCountSeparator={this.props.imageCountSeparator}
           isOpen={this.state.lightboxIsOpen}
           onClickImage={this.getOnClickImageFn()}

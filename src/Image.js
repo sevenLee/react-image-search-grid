@@ -201,6 +201,15 @@ class Image extends Component {
 
     // console.log("### this.state.hover:", this.state.hover);
 
+    const getZoomDisplayStatus = () => {
+      if (this.state.hover && this.props.enableLightbox) {
+      // if (this.props.enableLightbox) {
+        return "inline-block";
+      } else {
+        return "none";
+      }
+    };
+
     return (
       <div
         className="ReactGridGallery_tile"
@@ -238,6 +247,7 @@ class Image extends Component {
             bottom: "0px",
             overflow: "hidden",
             display: this.state.hover ? "inline-block" : "none",
+            // display: "inline-block",
             cursor: "pointer",
             pointerEvents: "visible",
             margin: "6px",
@@ -253,22 +263,22 @@ class Image extends Component {
         </div>
 
         <div
-          onClick={this.props.onClickZoom}
+          onClick={
+            this.props.onClickZoom
+              ? e => this.props.onClickZoom.call(this, this.props.index, e)
+              : null
+          }
           style={{
             pointerEvents: "none",
             position: "absolute",
             right: 0,
             bottom: "0px",
             overflow: "hidden",
-            display: this.state.hover
-              ? this.props.enableLightbox
-                ? "inline-block"
-                : "none"
-              : "none",
+            display: getZoomDisplayStatus(),
             cursor: "pointer",
             pointerEvents: "visible",
             margin: "6px",
-            padding: ".4em .6em .4em",
+            padding: ".12em .2em .12em",
             lineHeight: "1",
             cursor: "pointer",
             // fontSize: "75%",
@@ -276,7 +286,21 @@ class Image extends Component {
             backgroundColor: "#fff"
           }}
         >
-          <span>zoom</span>
+          {/* <span>zoom</span> */}
+          <svg
+            role="presentation"
+            viewBox="0 0 24 24"
+            style={{
+              display: "inline-block",
+              fill: "currentColor",
+              height: 20,
+              stroke: "currentColor",
+              strokeWidth: 0,
+              width: 20
+            }}
+          >
+            <path d="M14.016 5.016h4.969v4.969h-1.969v-3h-3v-1.969zM17.016 17.016v-3h1.969v4.969h-4.969v-1.969h3zM5.016 9.984v-4.969h4.969v1.969h-3v3h-1.969zM6.984 14.016v3h3v1.969h-4.969v-4.969h1.969z" />
+          </svg>
         </div>
 
         <div
