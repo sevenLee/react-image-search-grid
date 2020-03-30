@@ -272,6 +272,7 @@ class Gallery extends Component {
           //   onClick={this.getOnClickThumbnailFn()}
           onSelectImage={this.onSelectImage}
           onClickMoreDetail={id => this.props.onClickMoreDetail(id)}
+          onClickDownload={id => this.props.onClickDownload(id)}
           onClickZoom={this.getOnClickThumbnailFn()}
           enableLightbox={this.props.enableLightbox}
           tagStyle={this.props.tagStyle}
@@ -370,6 +371,7 @@ Gallery.propTypes = {
   margin: PropTypes.number,
   onClickThumbnail: PropTypes.func,
   onClickMoreDetail: PropTypes.func,
+  onClickDownload: PropTypes.func,
   lightboxWillOpen: PropTypes.func,
   lightboxWillClose: PropTypes.func,
   enableLightbox: PropTypes.bool,
