@@ -106,8 +106,8 @@ class Gallery extends Component {
   }
 
   onClickImage() {
-    if (this.state.currentImage === this.props.images.length - 1) return;
-    this.gotoNext();
+    // if (this.state.currentImage === this.props.images.length - 1) return;
+    // this.gotoNext();
   }
 
   onSelectImage(index, event) {
@@ -269,11 +269,11 @@ class Gallery extends Component {
           margin={this.props.margin}
           height={this.props.rowHeight}
           isSelectable={this.props.enableImageSelection}
-          //   onClick={this.getOnClickThumbnailFn()}
+          onClick={this.getOnClickThumbnailFn()}
           onSelectImage={this.onSelectImage}
           onClickMoreDetail={id => this.props.onClickMoreDetail(id)}
           onClickDownload={id => this.props.onClickDownload(id)}
-          onClickZoom={this.getOnClickThumbnailFn()}
+          // onClickZoom={this.getOnClickThumbnailFn()}
           enableLightbox={this.props.enableLightbox}
           tagStyle={this.props.tagStyle}
           tileViewportStyle={this.props.tileViewportStyle}

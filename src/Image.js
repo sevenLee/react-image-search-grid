@@ -262,12 +262,12 @@ class Image extends Component {
           <span>More Info</span>
         </div>
 
-        <div
+        {/* <div
           onClick={() => this.props.onClickDownload(resultItemId)}
           style={{
             pointerEvents: "none",
             position: "absolute",
-            right: 30,
+            right: 0,
             bottom: "0px",
             height: 24,
             width: 24,
@@ -295,9 +295,9 @@ class Image extends Component {
               d="M9.7 15.5l4.4-5.2c.4-.4.3-1.1-.1-1.4-.4-.4-1.1-.3-1.4.1l-1.9 2.2V1c0-.6-.4-1-1-1s-1 .4-1 1v10.3L6.8 9c-.4-.4-1-.5-1.4-.1-.4.4-.5 1-.1 1.4l4.4 5.2z"
             ></path>
           </svg>
-        </div>
+        </div> */}
 
-        <div
+        {/* <div
           onClick={
             this.props.onClickZoom
               ? e => this.props.onClickZoom.call(this, this.props.index, e)
@@ -321,7 +321,6 @@ class Image extends Component {
             backgroundColor: "#fff"
           }}
         >
-          {/* <span>zoom</span> */}
           <svg
             role="presentation"
             viewBox="0 0 24 24"
@@ -336,7 +335,7 @@ class Image extends Component {
           >
             <path d="M14.016 5.016h4.969v4.969h-1.969v-3h-3v-1.969zM17.016 17.016v-3h1.969v4.969h-4.969v-1.969h3zM5.016 9.984v-4.969h4.969v1.969h-3v3h-1.969zM6.984 14.016v3h3v1.969h-4.969v-4.969h1.969z" />
           </svg>
-        </div>
+        </div> */}
 
         <div
           className="ReactGridGallery_tile-bottom-bar"
