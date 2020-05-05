@@ -7,7 +7,7 @@ class Image extends Component {
     super(props);
 
     this.state = {
-      hover: false
+      hover: false,
     };
   }
 
@@ -24,7 +24,7 @@ class Image extends Component {
       textAlign: "center",
       whiteSpace: "nowrap",
       verticalAlign: "baseline",
-      borderRadius: ".25em"
+      borderRadius: ".25em",
     };
   }
 
@@ -36,7 +36,7 @@ class Image extends Component {
       nanoBase64Backgorund = {
         background: `url(${this.props.item.nano})`,
         backgroundSize: "cover",
-        backgroundPosition: "center center"
+        backgroundPosition: "center center",
       };
     }
     if (this.props.item.isSelected)
@@ -45,7 +45,7 @@ class Image extends Component {
           width: this.props.item.vwidth - 32,
           height: this.props.height - 32,
           margin: 16,
-          overflow: "hidden"
+          overflow: "hidden",
         },
         nanoBase64Backgorund
       );
@@ -53,7 +53,7 @@ class Image extends Component {
       {
         width: this.props.item.vwidth,
         height: this.props.height,
-        overflow: "hidden"
+        overflow: "hidden",
       },
       nanoBase64Backgorund
     );
@@ -109,7 +109,7 @@ class Image extends Component {
         height: height,
         marginLeft: marginLeft,
         marginTop: marginTop,
-        transform: rotationTransformValue
+        transform: rotationTransformValue,
       };
     }
     return {
@@ -118,7 +118,7 @@ class Image extends Component {
       height: this.props.height,
       marginLeft: this.props.item.marginLeft,
       marginTop: 0,
-      transform: rotationTransformValue
+      transform: rotationTransformValue,
     };
   }
 
@@ -145,7 +145,7 @@ class Image extends Component {
       typeof this.props.item.tags === "undefined" ? (
         <noscript />
       ) : (
-        this.props.item.tags.map(tag => {
+        this.props.item.tags.map((tag) => {
           const key =
             tag.key ||
             (typeof tag.value === "string" ? tag.value : null) ||
@@ -158,7 +158,7 @@ class Image extends Component {
                 display: "inline-block",
                 cursor: "pointer",
                 pointerEvents: "visible",
-                margin: "2px"
+                margin: "2px",
               }}
             >
               <span style={this.tagStyle()}>{tag.value}</span>
@@ -179,7 +179,7 @@ class Image extends Component {
             opacity: this.state.hover ? 1 : 0,
             position: "absolute",
             height: "100%",
-            width: "100%"
+            width: "100%",
           }}
         >
           {this.props.item.customOverlay}
@@ -194,7 +194,7 @@ class Image extends Component {
         typeof this.props.item.caption === "string"
           ? this.props.item.caption
           : null,
-      style: this.thumbnailStyle()
+      style: this.thumbnailStyle(),
     };
 
     var ThumbnailImageComponent = this.props.thumbnailImageComponent;
@@ -214,15 +214,15 @@ class Image extends Component {
       <div
         className="ReactGridGallery_tile"
         key={"tile-" + this.props.index}
-        onMouseEnter={e => this.setState({ hover: true })}
-        onMouseLeave={e => this.setState({ hover: false })}
+        onMouseEnter={(e) => this.setState({ hover: true })}
+        onMouseLeave={(e) => this.setState({ hover: false })}
         style={{
           margin: this.props.margin,
           WebkitUserSelect: "none",
           position: "relative",
           float: "left",
           background: "#eee",
-          padding: "0px"
+          padding: "0px",
         }}
       >
         <div
@@ -233,7 +233,7 @@ class Image extends Component {
             opacity: 1,
             position: "absolute",
             height: "36px",
-            width: "100%"
+            width: "100%",
           }}
         >
           {this.renderCheckButton()}
@@ -256,10 +256,14 @@ class Image extends Component {
             cursor: "pointer",
             // fontSize: "75%",
             color: "#096dd9",
-            backgroundColor: "#fff"
+            backgroundColor: "#fff",
           }}
         >
-          <span>More Info</span>
+          <span>
+            {this.props.moreInfoLabel === undefined
+              ? `More Info`
+              : this.props.moreInfoLabel}
+          </span>
         </div>
 
         {/* <div
@@ -348,7 +352,7 @@ class Image extends Component {
             maxHeight: "160px",
             width: "100%",
             bottom: "0px",
-            overflow: "hidden"
+            overflow: "hidden",
           }}
         >
           {tags}
@@ -370,7 +374,7 @@ class Image extends Component {
               !this.props.item.isSelected &&
               this.props.isSelectable
                 ? "linear-gradient(to bottom,rgba(0,0,0,0.26),transparent 56px,transparent)"
-                : "none"
+                : "none",
           }}
         ></div>
 
@@ -380,7 +384,7 @@ class Image extends Component {
           key={"tile-viewport-" + this.props.index}
           onClick={
             this.props.onClick
-              ? e => this.props.onClick.call(this, this.props.index, e)
+              ? (e) => this.props.onClick.call(this, this.props.index, e)
               : null
           }
         >
@@ -404,7 +408,7 @@ class Image extends Component {
               userSelect: "text",
               WebkitUserSelect: "text",
               MozUserSelect: "text",
-              overflow: "hidden"
+              overflow: "hidden",
             }}
           >
             {this.props.item.thumbnailCaption}
@@ -427,12 +431,12 @@ Image.propTypes = {
   thumbnailStyle: PropTypes.func,
   tagStyle: PropTypes.object,
   customOverlay: PropTypes.element,
-  thumbnailImageComponent: PropTypes.func
+  thumbnailImageComponent: PropTypes.func,
 };
 
 Image.defaultProps = {
   isSelectable: true,
-  hover: false
+  hover: false,
 };
 
 export default Image;

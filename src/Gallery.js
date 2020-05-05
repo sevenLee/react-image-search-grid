@@ -271,14 +271,15 @@ class Gallery extends Component {
           isSelectable={this.props.enableImageSelection}
           onClick={this.getOnClickThumbnailFn()}
           onSelectImage={this.onSelectImage}
-          onClickMoreDetail={id => this.props.onClickMoreDetail(id)}
-          onClickDownload={id => this.props.onClickDownload(id)}
+          onClickMoreDetail={(id) => this.props.onClickMoreDetail(id)}
+          onClickDownload={(id) => this.props.onClickDownload(id)}
           // onClickZoom={this.getOnClickThumbnailFn()}
           enableLightbox={this.props.enableLightbox}
           tagStyle={this.props.tagStyle}
           tileViewportStyle={this.props.tileViewportStyle}
           thumbnailStyle={this.props.thumbnailStyle}
           thumbnailImageComponent={this.props.thumbnailImageComponent}
+          moreInfoLabel={this.props.moreInfoLabel}
         />
       );
     });
@@ -296,11 +297,11 @@ class Gallery extends Component {
       <div
         id={this.props.id}
         className="ReactGridGallery"
-        ref={c => (this._gallery = c)}
+        ref={(c) => (this._gallery = c)}
       >
         <iframe
           style={resizeIframeStyles}
-          ref={c =>
+          ref={(c) =>
             c &&
             c.contentWindow &&
             c.contentWindow.addEventListener("resize", this.onResize)
@@ -369,6 +370,7 @@ Gallery.propTypes = {
   rowHeight: PropTypes.number,
   maxRows: PropTypes.number,
   margin: PropTypes.number,
+  moreInfoLabel: PropTypes.string,
   onClickThumbnail: PropTypes.func,
   onClickMoreDetail: PropTypes.func,
   onClickDownload: PropTypes.func,
