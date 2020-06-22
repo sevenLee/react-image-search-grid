@@ -297,7 +297,10 @@ class Gallery extends Component {
       <div
         id={this.props.id}
         className="ReactGridGallery"
-        ref={(c) => (this._gallery = c)}
+        ref={(c) => {
+          this._gallery = c;
+          this.props.getRootRef(c);
+        }}
       >
         <iframe
           style={resizeIframeStyles}
@@ -374,6 +377,7 @@ Gallery.propTypes = {
   onClickThumbnail: PropTypes.func,
   onClickMoreDetail: PropTypes.func,
   onClickDownload: PropTypes.func,
+  getRootRef: PropTypes.func,
   lightboxWillOpen: PropTypes.func,
   lightboxWillClose: PropTypes.func,
   enableLightbox: PropTypes.bool,
