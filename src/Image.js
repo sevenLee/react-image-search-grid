@@ -8,7 +8,29 @@ class Image extends Component {
 
     this.state = {
       hover: false,
+      isFirstPlayVideo: false,
     };
+
+    this.videoRef = React.createRef();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      this.props.isVideo &&
+      this.videoRef.current &&
+      nextProps.activedId !== this.props.index
+    ) {
+      this.videoRef.current.pause();
+    }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    // console.log("### shouldComponentUpdate nextProps:", nextProps);
+    if (nextProps.activedId && nextProps.activedId !== this.props.index) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   tagStyle() {
@@ -197,6 +219,24 @@ class Image extends Component {
       style: this.thumbnailStyle(),
     };
 
+    var videoProps = {
+      key: "video-" + this.props.index,
+      autoPlay: true,
+      controls: true,
+      style: this.thumbnailStyle(),
+      onClick: () => {
+        console.log("### video Click!");
+      },
+      onPlay: () => {
+        console.log("### video onPlay!");
+      },
+      onError: (e) => {
+        console.log("!!!!!!!!!!### video onError:", e);
+      },
+      preload: "none",
+      // poster: this.props.item.thumbnail,
+    };
+
     var ThumbnailImageComponent = this.props.thumbnailImageComponent;
 
     // console.log("### this.state.hover:", this.state.hover);
@@ -207,6 +247,38 @@ class Image extends Component {
         return "inline-block";
       } else {
         return "none";
+      }
+    };
+
+    const makeMediaElement = () => {
+      if (this.state.isFirstPlayVideo && this.props.isVideo) {
+        return (
+          <video
+            {...videoProps}
+            ref={this.videoRef}
+            style={{
+              // display:
+              //   this.state.isFirstPlayVideo && this.props.isVideo
+              //     ? "block"
+              //     : "none",
+              cursor: "pointer",
+              width: this.props.item.vwidth,
+              height: this.props.height,
+              // transform: rotationTransformValue,
+            }}
+          />
+        );
+      } else {
+        if (ThumbnailImageComponent) {
+          return (
+            <ThumbnailImageComponent
+              {...this.props}
+              imageProps={thumbnailProps}
+            />
+          );
+        } else {
+          return <img {...thumbnailProps} />;
+        }
       }
     };
 
@@ -382,20 +454,37 @@ class Image extends Component {
           className="ReactGridGallery_tile-viewport"
           style={this.tileViewportStyle()}
           key={"tile-viewport-" + this.props.index}
-          onClick={
-            this.props.onClick
-              ? (e) => this.props.onClick.call(this, this.props.index, e)
-              : null
-          }
+          onClick={(e) => {
+            console.log("[G] out click");
+
+            if (this.props.onClick) {
+              if (this.props.isVideo) {
+                console.log(
+                  "#### this.videoRef.current:",
+                  this.videoRef.current
+                );
+                this.setState({ isFirstPlayVideo: true }, () => {
+                  if (!this.videoRef.current.src) {
+                    console.log("#### Loading video...");
+                    this.videoRef.current.src = this.props.item.src;
+                  }
+                });
+              }
+
+              this.props.onClick(this.props.index, e);
+            }
+          }}
         >
-          {ThumbnailImageComponent ? (
+          {makeMediaElement()}
+
+          {/* {ThumbnailImageComponent ? (
             <ThumbnailImageComponent
               {...this.props}
               imageProps={thumbnailProps}
             />
           ) : (
             <img {...thumbnailProps} />
-          )}
+          )} */}
         </div>
         {this.props.item.thumbnailCaption && (
           <div

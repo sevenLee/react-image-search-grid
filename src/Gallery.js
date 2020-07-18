@@ -12,7 +12,8 @@ class Gallery extends Component {
       thumbnails: [],
       lightboxIsOpen: this.props.isOpen,
       currentImage: this.props.currentImage,
-      containerWidth: 0
+      containerWidth: 0,
+      activedId: null,
     };
 
     this.onResize = this.onResize.bind(this);
@@ -23,6 +24,7 @@ class Gallery extends Component {
     this.onClickImage = this.onClickImage.bind(this);
     this.openLightbox = this.openLightbox.bind(this);
     this.onSelectImage = this.onSelectImage.bind(this);
+    this.handleClickThumbnail = this.handleClickThumbnail.bind(this);
   }
 
   componentDidMount() {
@@ -36,7 +38,7 @@ class Gallery extends Component {
     if (this.state.images != np.images || this.props.maxRows != np.maxRows) {
       this.setState({
         images: np.images,
-        thumbnails: this.renderThumbs(this._gallery.clientWidth, np.images)
+        thumbnails: this.renderThumbs(this._gallery.clientWidth, np.images),
       });
     }
   }
@@ -52,7 +54,7 @@ class Gallery extends Component {
     if (!this._gallery) return;
     this.setState({
       containerWidth: Math.floor(this._gallery.clientWidth),
-      thumbnails: this.renderThumbs(this._gallery.clientWidth)
+      thumbnails: this.renderThumbs(this._gallery.clientWidth),
     });
   }
 
@@ -69,7 +71,7 @@ class Gallery extends Component {
 
     this.setState({
       currentImage: index,
-      lightboxIsOpen: true
+      lightboxIsOpen: true,
     });
   }
 
@@ -83,7 +85,7 @@ class Gallery extends Component {
 
     this.setState({
       currentImage: 0,
-      lightboxIsOpen: false
+      lightboxIsOpen: false,
     });
   }
 
@@ -92,7 +94,7 @@ class Gallery extends Component {
       this.props.currentImageWillChange.call(this, this.state.currentImage - 1);
     }
     this.setState({
-      currentImage: this.state.currentImage - 1
+      currentImage: this.state.currentImage - 1,
     });
   }
 
@@ -101,7 +103,7 @@ class Gallery extends Component {
       this.props.currentImageWillChange.call(this, this.state.currentImage + 1);
     }
     this.setState({
-      currentImage: this.state.currentImage + 1
+      currentImage: this.state.currentImage + 1,
     });
   }
 
@@ -121,19 +123,36 @@ class Gallery extends Component {
       this.props.currentImageWillChange.call(this, index);
     }
     this.setState({
-      currentImage: index
+      currentImage: index,
     });
   }
 
-  getOnClickThumbnailFn() {
-    if (!this.props.onClickThumbnail && this.props.enableLightbox) {
-      return this.openLightbox;
+  handleClickThumbnail(index, event) {
+    this.setState({ activedId: index });
+    if (
+      !this.props.onClickThumbnail &&
+      this.props.enableLightbox &&
+      !this.props.isVideo
+    ) {
+      // console.log('#### [handleClickThumbnail] this.props.images:', this.props.images)
+      return this.openLightbox(index, event);
     }
     if (this.props.onClickThumbnail) {
-      return this.props.onClickThumbnail;
+      return this.props.onClickThumbnail();
     }
-    return null;
+
+    return false;
   }
+
+  // getOnClickThumbnailFn() {
+  //   if (!this.props.onClickThumbnail && this.props.enableLightbox) {
+  //     return this.openLightbox;
+  //   }
+  //   if (this.props.onClickThumbnail) {
+  //     return this.props.onClickThumbnail;
+  //   }
+  //   return null;
+  // }
 
   getOnClickZoomFn() {
     if (this.props.enableLightbox) {
@@ -266,10 +285,12 @@ class Gallery extends Component {
           key={"Image-" + idx + "-" + item.src}
           item={item}
           index={idx}
+          isVideo={this.props.isVideo}
+          activedId={this.state.activedId}
           margin={this.props.margin}
           height={this.props.rowHeight}
           isSelectable={this.props.enableImageSelection}
-          onClick={this.getOnClickThumbnailFn()}
+          onClick={this.handleClickThumbnail}
           onSelectImage={this.onSelectImage}
           onClickMoreDetail={(id) => this.props.onClickMoreDetail(id)}
           onClickDownload={(id) => this.props.onClickDownload(id)}
@@ -291,7 +312,7 @@ class Gallery extends Component {
       borderWidth: 0,
       position: "fixed",
       backgroundColor: "transparent",
-      width: "100%"
+      width: "100%",
     };
     return (
       <div
@@ -355,7 +376,7 @@ Gallery.propTypes = {
           value: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
             .isRequired,
           title: PropTypes.string.isRequired,
-          key: PropTypes.string
+          key: PropTypes.string,
         })
       ),
       thumbnailWidth: PropTypes.number.isRequired,
@@ -363,8 +384,8 @@ Gallery.propTypes = {
       isSelected: PropTypes.bool,
       thumbnailCaption: PropTypes.oneOfType([
         PropTypes.string,
-        PropTypes.element
-      ])
+        PropTypes.element,
+      ]),
     })
   ).isRequired,
   id: PropTypes.string,
@@ -377,6 +398,7 @@ Gallery.propTypes = {
   onClickThumbnail: PropTypes.func,
   onClickMoreDetail: PropTypes.func,
   onClickDownload: PropTypes.func,
+  isVideo: PropTypes.bool,
   getRootRef: PropTypes.func,
   lightboxWillOpen: PropTypes.func,
   lightboxWillClose: PropTypes.func,
@@ -402,7 +424,7 @@ Gallery.propTypes = {
   onClickLightboxThumbnail: PropTypes.func,
   tagStyle: PropTypes.object,
   thumbnailImageComponent: PropTypes.func,
-  lightBoxProps: PropTypes.object
+  lightBoxProps: PropTypes.object,
 };
 
 Gallery.defaultProps = {
@@ -421,7 +443,7 @@ Gallery.defaultProps = {
   showImageCount: true,
   lightboxWidth: 1024,
   showLightboxThumbnails: false,
-  lightBoxProps: {}
+  lightBoxProps: {},
 };
 
 module.exports = Gallery;
