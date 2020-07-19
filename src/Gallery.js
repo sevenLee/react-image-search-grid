@@ -286,14 +286,16 @@ class Gallery extends Component {
           item={item}
           index={idx}
           isVideo={this.props.isVideo}
+          morePosition={this.props.morePosition}
           activedId={this.state.activedId}
+          showDownloadIcon={this.props.showDownloadIcon}
           margin={this.props.margin}
           height={this.props.rowHeight}
           isSelectable={this.props.enableImageSelection}
           onClick={this.handleClickThumbnail}
           onSelectImage={this.onSelectImage}
-          onClickMoreDetail={(id) => this.props.onClickMoreDetail(id)}
-          onClickDownload={(id) => this.props.onClickDownload(id)}
+          onClickMoreDetail={this.props.onClickMoreDetail}
+          onClickDownload={this.props.onClickDownload}
           // onClickZoom={this.getOnClickThumbnailFn()}
           enableLightbox={this.props.enableLightbox}
           tagStyle={this.props.tagStyle}
@@ -399,6 +401,8 @@ Gallery.propTypes = {
   onClickMoreDetail: PropTypes.func,
   onClickDownload: PropTypes.func,
   isVideo: PropTypes.bool,
+  showDownloadIcon: PropTypes.bool,
+  morePosition: PropTypes.string,
   getRootRef: PropTypes.func,
   lightboxWillOpen: PropTypes.func,
   lightboxWillClose: PropTypes.func,

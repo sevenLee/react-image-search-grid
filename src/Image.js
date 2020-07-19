@@ -1,6 +1,9 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
+import classNames from "classnames";
 import CheckButton from "./CheckButton.js";
+import MoreBtn from "./MoreBtn";
+import DownloadBtn from "./DownloadBtn";
 
 class Image extends Component {
   constructor(props) {
@@ -9,9 +12,12 @@ class Image extends Component {
     this.state = {
       hover: false,
       isFirstPlayVideo: false,
+      playing: false,
     };
 
     this.videoRef = React.createRef();
+    this.handleMoreClick = this.handleMoreClick.bind(this);
+    this.handleDownloadlick = this.handleDownloadlick.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -26,11 +32,13 @@ class Image extends Component {
 
   shouldComponentUpdate(nextProps) {
     // console.log("### shouldComponentUpdate nextProps:", nextProps);
-    if (nextProps.activedId && nextProps.activedId !== this.props.index) {
-      return false;
-    } else {
-      return true;
-    }
+    // if (nextProps.activedId && nextProps.activedId !== this.props.index) {
+    //   return false;
+    // } else {
+    //   return true;
+    // }
+
+    return true;
   }
 
   tagStyle() {
@@ -160,9 +168,17 @@ class Image extends Component {
     );
   }
 
+  handleMoreClick() {
+    this.props.onClickMoreDetail(this.props.item.resultItemId);
+  }
+
+  handleDownloadlick() {
+    // this.props.onClickDownload(this.props.item.resultItemId);
+    window.open(this.props.item.downloadUrl + "&download=true", "_blank");
+  }
+
   render() {
     var alt = this.props.item.alt ? this.props.item.alt : "";
-    const resultItemId = this.props.item.resultItemId;
     var tags =
       typeof this.props.item.tags === "undefined" ? (
         <noscript />
@@ -225,13 +241,26 @@ class Image extends Component {
       controls: true,
       style: this.thumbnailStyle(),
       onClick: () => {
-        console.log("### video Click!");
+        // console.log(
+        //   "### video Click , this.state.playing:",
+        //   this.state.playing
+        // );
+        // this.setState({ playing: !this.state.playing }, (newState) => {
+        //   console.log('### newState:', newState)
+        //   console.log('### newState this.state:', this.state)
+        // });
       },
       onPlay: () => {
-        console.log("### video onPlay!");
+        // console.log("### video onPlay!");
+      },
+      onPause: () => {
+        // console.log("### video onPause index:", this.props.index);
+        this.setState({ playing: false }, () => {
+          // console.log("### onPause after set, this.state:", this.state);
+        });
       },
       onError: (e) => {
-        console.log("!!!!!!!!!!### video onError:", e);
+        console.log("Error video onError:", e);
       },
       preload: "none",
       // poster: this.props.item.thumbnail,
@@ -285,6 +314,10 @@ class Image extends Component {
     return (
       <div
         className="ReactGridGallery_tile"
+        // className={classNames({
+        //   "media-thumb": true,
+        //   video: this.props.isVideo && this.state.isFirstPlayVideo
+        // })}
         key={"tile-" + this.props.index}
         onMouseEnter={(e) => this.setState({ hover: true })}
         onMouseLeave={(e) => this.setState({ hover: false })}
@@ -310,68 +343,41 @@ class Image extends Component {
         >
           {this.renderCheckButton()}
         </div>
-        <div
-          onClick={() => this.props.onClickMoreDetail(resultItemId)}
-          style={{
-            pointerEvents: "none",
-            position: "absolute",
-            left: 0,
-            bottom: "0px",
-            overflow: "hidden",
-            display: this.state.hover ? "inline-block" : "none",
-            // display: "inline-block",
-            cursor: "pointer",
-            pointerEvents: "visible",
-            margin: "6px",
-            padding: ".4em .6em .4em",
-            lineHeight: "1",
-            cursor: "pointer",
-            // fontSize: "75%",
-            color: "#096dd9",
-            backgroundColor: "#fff",
-          }}
-        >
-          <span>
-            {this.props.moreInfoLabel === undefined
-              ? `More Info`
-              : this.props.moreInfoLabel}
-          </span>
-        </div>
 
-        {/* <div
-          onClick={() => this.props.onClickDownload(resultItemId)}
+        <div
           style={{
-            pointerEvents: "none",
-            position: "absolute",
-            right: 0,
-            bottom: "0px",
-            height: 24,
-            width: 24,
+            top:
+              this.props.morePosition === "top"
+                ? !this.state.isFirstPlayVideo
+                  ? 0
+                  : 8
+                : "auto",
+            bottom: this.props.morePosition === "top" ? "auto" : 0,
             overflow: "hidden",
-            display: this.state.hover ? "inline-block" : "none",
-            // display: "inline-block",
-            cursor: "pointer",
-            pointerEvents: "visible",
-            margin: "6px",
-            padding: "3px",
-            lineHeight: "1",
-            cursor: "pointer",
-            // fontSize: "75%",
-            color: "#096dd9",
-            backgroundColor: "#fff"
+            display: "flex",
+            position: "absolute",
+            flexWrap: "wrap",
+            alignItems: "flex-start",
           }}
         >
-          <svg viewBox="0 0 19.3 19">
-            <path
-              fill="currentColor"
-              d="M16 6.3c-.6 0-1 .4-1 1s.4 1 1 1h1.3V17H2V8.3h1.3c.6 0 1-.4 1-1s-.4-1-1-1H0V19h19.3V6.3H16z"
-            ></path>
-            <path
-              fill="currentColor"
-              d="M9.7 15.5l4.4-5.2c.4-.4.3-1.1-.1-1.4-.4-.4-1.1-.3-1.4.1l-1.9 2.2V1c0-.6-.4-1-1-1s-1 .4-1 1v10.3L6.8 9c-.4-.4-1-.5-1.4-.1-.4.4-.5 1-.1 1.4l4.4 5.2z"
-            ></path>
-          </svg>
-        </div> */}
+          <MoreBtn
+            resultItemId={this.props.resultItemId}
+            onClick={this.handleMoreClick}
+            moreInfoLabel={this.props.moreInfoLabel}
+            isHover={this.state.hover}
+            isFirstPlayVideo={this.state.isFirstPlayVideo}
+            playing={this.state.playing}
+          />
+          {this.props.showDownloadIcon && (
+            <DownloadBtn
+              resultItemId={this.props.resultItemId}
+              onClick={this.handleDownloadlick}
+              isHover={this.state.hover}
+              isFirstPlayVideo={this.state.isFirstPlayVideo}
+              playing={this.state.playing}
+            />
+          )}
+        </div>
 
         {/* <div
           onClick={
@@ -451,24 +457,25 @@ class Image extends Component {
         ></div>
 
         <div
-          className="ReactGridGallery_tile-viewport"
+          // className="ReactGridGallery_tile-viewport"
+          className={classNames({
+            "media-thumb": true,
+            video: this.props.isVideo && !this.state.isFirstPlayVideo
+          })}
           style={this.tileViewportStyle()}
           key={"tile-viewport-" + this.props.index}
           onClick={(e) => {
-            console.log("[G] out click");
-
             if (this.props.onClick) {
               if (this.props.isVideo) {
-                console.log(
-                  "#### this.videoRef.current:",
-                  this.videoRef.current
-                );
-                this.setState({ isFirstPlayVideo: true }, () => {
-                  if (!this.videoRef.current.src) {
-                    console.log("#### Loading video...");
-                    this.videoRef.current.src = this.props.item.src;
+                this.setState(
+                  { isFirstPlayVideo: true, playing: !this.state.playing },
+                  () => {
+                    if (!this.videoRef.current.src) {
+                      console.log("#### Loading video...");
+                      this.videoRef.current.src = this.props.item.src;
+                    }
                   }
-                });
+                );
               }
 
               this.props.onClick(this.props.index, e);
