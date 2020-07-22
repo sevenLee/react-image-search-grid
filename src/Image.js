@@ -471,14 +471,14 @@ class Image extends Component {
                   { isFirstPlayVideo: true, playing: !this.state.playing },
                   () => {
                     if (!this.videoRef.current.src) {
-                      console.log("#### Loading video...");
+                      console.debug("#### Loading video...");
                       this.videoRef.current.src = this.props.item.src;
                     }
                   }
                 );
               }
 
-              this.props.onClick(this.props.index, e);
+              this.props.onClick(this.props.index, e, this.props.item);
             }
           }}
         >

@@ -127,7 +127,7 @@ class Gallery extends Component {
     });
   }
 
-  handleClickThumbnail(index, event) {
+  handleClickThumbnail(index, event, item) {
     this.setState({ activedId: index });
     if (
       !this.props.onClickThumbnail &&
@@ -138,7 +138,7 @@ class Gallery extends Component {
       return this.openLightbox(index, event);
     }
     if (this.props.onClickThumbnail) {
-      return this.props.onClickThumbnail();
+      return this.props.onClickThumbnail(item);
     }
 
     return false;
