@@ -18,6 +18,7 @@ class Image extends Component {
     this.videoRef = React.createRef();
     this.handleMoreClick = this.handleMoreClick.bind(this);
     this.handleDownloadlick = this.handleDownloadlick.bind(this);
+    this.handleOnPlay = this.handleOnPlay.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -39,6 +40,24 @@ class Image extends Component {
     // }
 
     return true;
+  }
+
+  handleOnPlay(e) {
+    if (this.props.onClick) {
+      if (this.props.isVideo) {
+        this.setState(
+          { isFirstPlayVideo: true, playing: !this.state.playing },
+          () => {
+            if (!this.videoRef.current.src) {
+              console.debug("#### Loading video...");
+              this.videoRef.current.src = this.props.item.src;
+            }
+          }
+        );
+      }
+
+      this.props.onClick(this.props.index, e, this.props.item);
+    }
   }
 
   tagStyle() {
@@ -250,8 +269,9 @@ class Image extends Component {
         //   console.log('### newState this.state:', this.state)
         // });
       },
-      onPlay: () => {
+      onPlay: (e) => {
         // console.log("### video onPlay!");
+        this.handleOnPlay(e);
       },
       onPause: () => {
         // console.log("### video onPause index:", this.props.index);
@@ -263,7 +283,7 @@ class Image extends Component {
         console.log("Error video onError:", e);
       },
       preload: "none",
-      // poster: this.props.item.thumbnail,
+      poster: this.props.item.thumbnail,
     };
 
     var ThumbnailImageComponent = this.props.thumbnailImageComponent;
@@ -460,27 +480,11 @@ class Image extends Component {
           // className="ReactGridGallery_tile-viewport"
           className={classNames({
             "media-thumb": true,
-            video: this.props.isVideo && !this.state.isFirstPlayVideo
+            video: this.props.isVideo && !this.state.isFirstPlayVideo,
           })}
           style={this.tileViewportStyle()}
           key={"tile-viewport-" + this.props.index}
-          onClick={(e) => {
-            if (this.props.onClick) {
-              if (this.props.isVideo) {
-                this.setState(
-                  { isFirstPlayVideo: true, playing: !this.state.playing },
-                  () => {
-                    if (!this.videoRef.current.src) {
-                      console.debug("#### Loading video...");
-                      this.videoRef.current.src = this.props.item.src;
-                    }
-                  }
-                );
-              }
-
-              this.props.onClick(this.props.index, e, this.props.item);
-            }
-          }}
+          onClick={this.handleOnPlay}
         >
           {makeMediaElement()}
 
