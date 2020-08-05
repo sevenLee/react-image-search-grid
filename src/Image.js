@@ -283,7 +283,7 @@ class Image extends Component {
         console.log("Error video onError:", e);
       },
       preload: "none",
-      poster: this.props.item.thumbnail,
+      // poster: this.props.item.thumbnail,
     };
 
     var ThumbnailImageComponent = this.props.thumbnailImageComponent;
