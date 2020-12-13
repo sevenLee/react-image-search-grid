@@ -1,12 +1,12 @@
 {
   "name": "react-image-search-grid",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Justified gallery component for React.",
   "main": "lib/Gallery.js",
   "dependencies": {
     "classnames": "^2.2.6",
-    "prop-types": "^15.5.8",
-    "react-images": "^0.5.16"
+    "image-tab-lightbox": "^0.6.0",
+    "prop-types": "^15.5.8"
   },
   "scripts": {
     "build": "NODE_OPTIONS=--max_old_space_size=4096 gulp default"
